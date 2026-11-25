@@ -3,6 +3,11 @@
 .env.*
 !.env.example
 !.env.*.example
+# Chỉ chứa địa chỉ backend, không có bí mật
+!web/.env.production
+
+# Thư mục liên kết project của Vercel CLI
+.vercel/
 
 # Thư viện và bản build (tạo lại được bằng npm install / next build)
 node_modules/

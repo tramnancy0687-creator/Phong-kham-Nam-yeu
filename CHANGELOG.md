@@ -2,6 +2,12 @@
 
 Ghi mới nhất lên trên. Mỗi lần sửa web app: thêm một mục ngắn — **ngày, đã làm gì, file chính, việc còn dở**.
 
+## 2026-11-25 — thử chuyển sang Vercel (bị chặn), giữ Render
+
+- Tách `server/src/app.js` (Express app, không listen) khỏi `server/src/index.js` (listen + job UC26 mỗi 24h). Thêm `GET /api/cron/archive-expired` (cần `Authorization: Bearer $CRON_SECRET`).
+- Sẵn sàng cho Vercel nhưng **chưa deploy**: `server/api/index.js`, `server/vercel.json` (region sin1, cron 19:00 UTC = 02:00 VN). Tên dự kiến: backend `namyeuclinic.vercel.app`, frontend `vndental-namyeu.vercel.app` (`vndental.vercel.app` đã thuộc người khác). Lý do dừng: mạng công ty (Sophos) chặn `vercel.com`, không đăng nhập Vercel được.
+- `web/.env.production`: host backend production = Render (`API_URL=https://phong-kham-nam-yeu-api.onrender.com`). Đổi sang Vercel thì sửa dòng này + `API_URL` trong `render.yaml`.
+
 ## 2026-11-25 — chuẩn bị deploy DB online (Neon)
 
 - `server/src/db.js`: pool cấu hình cho DB online (`DB_POOL_MAX`, timeout, bắt lỗi kết nối rảnh), báo lỗi rõ khi thiếu `DATABASE_URL`.
