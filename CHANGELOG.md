@@ -15,6 +15,9 @@ Ghi mới nhất lên trên. Mỗi lần sửa web app: thêm một mục ngắn
 - `render.yaml`: Blueprint deploy backend lên Render (free, Singapore, rootDir `server`, health check `/api/health`).
 - Backend đã chạy trên Render: https://phong-kham-nam-yeu-api.onrender.com (đã thử đăng nhập, dữ liệu qua Neon: đạt).
 - Vercel bị mạng công ty chặn → web cũng deploy lên Render: service `phong-kham-nam-yeu-web` trong `render.yaml` (`API_URL` trỏ backend, đọc lúc build vì `rewrites`).
+- **Web online: https://phong-kham-nam-yeu-web.onrender.com** — đã thử: các trang 200, đăng nhập + lịch hẹn + hóa đơn qua proxy `/api` → backend → Neon: đạt.
+- Blueprint Render không tự đồng bộ: sửa `render.yaml` xong phải bấm **Manual sync** trong Blueprint. Sửa code thông thường thì Render tự deploy lại khi push lên `main`.
+- Gói free: backend/web ngủ sau 15 phút, lần đầu mở lại mất 30–60 giây (request đầu qua proxy có thể bị ngắt — thử lại).
 - `start-app.bat` vẫn dùng DB local.
 
 ## 2026-11-25

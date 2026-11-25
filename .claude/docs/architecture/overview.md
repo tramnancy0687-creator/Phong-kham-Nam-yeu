@@ -89,6 +89,7 @@ Luồng chính: **Đặt lịch** (lễ tân) → **Bắt đầu khám** tạo p
 | pgAdmin | `start-pgadmin.bat` → http://127.0.0.1:5050 |
 | Đưa DB lên Neon | Điền `server/.env.production` → `powershell -ExecutionPolicy Bypass -File database\deploy-online.ps1` (`-Overwrite` để ghi đè) |
 | API dùng DB online | `cd server && npm run start:prod` |
+| Bản online | Web https://phong-kham-nam-yeu-web.onrender.com → API https://phong-kham-nam-yeu-api.onrender.com (Render, `render.yaml`) → DB Neon. Push lên `main` là Render tự deploy lại |
 | Tạo lại DB | `00_create_database.sql` bằng `tramnguyen`, rồi `01`–`04` bằng `tramadmin` với `-1 -v ON_ERROR_STOP=1` |
 
 Kết nối database: host `localhost`, port `5432`, DB `phong_kham_nam_yeu`, user `tramadmin` / `123456`.
