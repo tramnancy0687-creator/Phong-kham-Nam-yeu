@@ -1,0 +1,12 @@
+# Bí mật (mật khẩu, JWT secret) — không đưa vào Git
+.env
+.env*.local
+
+# Thư viện và bản build (tạo lại được bằng npm install / next build)
+node_modules/
+.next/
+out/
+
+# Cài đặt cá nhân của Claude Code, log
+.claude/settings.local.json
+*.log

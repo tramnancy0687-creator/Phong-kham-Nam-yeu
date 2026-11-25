@@ -1,0 +1,139 @@
+@startuml use-case-nha-khoa
+title Sơ đồ Use Case — Hệ thống quản lý Nha khoa Nụ Cười Việt
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Nhân viên" as NV
+actor "Lễ tân" as LT
+actor "Bác sĩ" as BS
+actor "Quản lý" as QL
+actor "Hệ thống\n(Timer)" as HT <<system>>
+
+LT -up-|> NV
+BS -up-|> NV
+QL -up-|> NV
+
+rectangle "Hệ thống quản lý Nha khoa Nụ Cười Việt" {
+
+  usecase "Đăng nhập" as UC00
+
+  package "Bệnh nhân" {
+    usecase "Tìm bệnh nhân theo SĐT" as UC01
+    usecase "Đăng ký bệnh nhân" as UC02
+    usecase "Cập nhật hồ sơ" as UC03
+    usecase "Xem lịch sử khám" as UC04
+  }
+
+  package "Lịch hẹn" {
+    usecase "Đặt lịch hẹn" as UC05
+    usecase "Kiểm tra trùng\nghế / bác sĩ" as UC05a
+    usecase "Kiểm tra ca trực" as UC05b
+    usecase "Đổi lịch hẹn" as UC06
+    usecase "Hủy lịch hẹn" as UC07
+    usecase "Ghi lý do hủy" as UC07a
+    usecase "Xem lịch làm việc" as UC08
+  }
+
+  package "Khám & điều trị" {
+    usecase "Ghi phiếu điều trị" as UC09
+    usecase "Sửa phiếu điều trị" as UC10
+    usecase "Ghi lịch sử sửa" as UC10a
+    usecase "Kê đơn thuốc" as UC11
+    usecase "Ghi nhận vật tư dùng" as UC12
+    usecase "Lập liệu trình" as UC13
+    usecase "Theo dõi liệu trình" as UC14
+  }
+
+  package "Thanh toán" {
+    usecase "Lập hóa đơn" as UC15
+    usecase "Áp dụng giảm giá" as UC16
+    usecase "Thu tiền" as UC17
+    usecase "Thu theo đợt liệu trình" as UC18
+    usecase "Xem công nợ" as UC19
+  }
+
+  package "Danh mục & kho" {
+    usecase "Quản lý bảng giá" as UC20
+    usecase "Quản lý ca trực" as UC21
+    usecase "Quản lý ghế" as UC22
+    usecase "Quản lý nhân viên" as UC23
+    usecase "Quản lý thuốc / vật tư" as UC24
+    usecase "Cảnh báo dưới ngưỡng" as UC25
+    usecase "Lưu trữ hồ sơ 5 năm" as UC26
+  }
+
+  package "Báo cáo" {
+    usecase "Xem báo cáo" as UC27
+    usecase "Doanh thu theo bác sĩ" as R1
+    usecase "Ghế trống theo khung giờ" as R2
+    usecase "BN quá 6 tháng chưa quay lại" as R3
+    usecase "Dịch vụ hay bị hủy & lý do" as R4
+    usecase "Công nợ theo bệnh nhân" as R5
+    usecase "Liệu trình đang dở" as R6
+    usecase "Thuốc / vật tư sắp hết" as R7
+    usecase "So sánh doanh thu tháng trước" as R8
+  }
+}
+
+' ===== Tác nhân - Use case =====
+NV --> UC00
+
+LT --> UC01
+LT --> UC02
+LT --> UC03
+LT --> UC05
+LT --> UC06
+LT --> UC07
+LT --> UC08
+LT --> UC14
+LT --> UC15
+LT --> UC17
+LT --> UC19
+
+BS --> UC01
+BS --> UC04
+BS --> UC08
+BS --> UC09
+BS --> UC10
+BS --> UC12
+BS --> UC13
+BS --> UC14
+
+QL --> UC19
+QL --> UC20
+QL --> UC21
+QL --> UC22
+QL --> UC23
+QL --> UC24
+QL --> UC27
+
+HT --> UC25
+HT --> UC26
+
+' ===== Quan hệ giữa các use case =====
+UC02 ..> UC01  : <<include>>
+UC05 ..> UC05a : <<include>>
+UC05 ..> UC05b : <<include>>
+UC06 ..> UC05a : <<include>>
+UC06 ..> UC05b : <<include>>
+UC07 ..> UC07a : <<include>>
+UC10 ..> UC10a : <<include>>
+
+UC11 .up.> UC09 : <<extend>>
+UC16 .up.> UC15 : <<extend>>
+UC25 .up.> UC12 : <<extend>>
+
+UC18 -up-|> UC17
+
+R1 -up-|> UC27
+R2 -up-|> UC27
+R3 -up-|> UC27
+R4 -up-|> UC27
+R5 -up-|> UC27
+R6 -up-|> UC27
+R7 -up-|> UC27
+R8 -up-|> UC27
+
+@enduml

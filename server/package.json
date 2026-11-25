@@ -1,0 +1,16 @@
+{
+  "name": "phong-kham-nam-yeu-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API Node.js cho hệ thống quản lý Phòng khám Nấm yêu",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file=.env src/index.js",
+    "start": "node --env-file=.env src/index.js"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.1"
+  }
+}
