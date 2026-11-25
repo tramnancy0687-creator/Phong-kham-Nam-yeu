@@ -7,7 +7,18 @@ pg.types.setTypeParser(1082, (v) => v); // date
 pg.types.setTypeParser(1700, (v) => (v === null ? null : Number(v)));
 pg.types.setTypeParser(20, (v) => (v === null ? null : Number(v)));
 
-export const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+if (!process.env.DATABASE_URL) throw new Error('Thiếu DATABASE_URL trong file .env / biến môi trường');
+
+// SSL do chuỗi kết nối quyết định: DB online (Neon…) thêm ?sslmode=require, máy local thì không cần
+export const pool = new pg.Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: Number(process.env.DB_POOL_MAX) || 10,
+  idleTimeoutMillis: 30_000, // trả kết nối rảnh, DB free tier giới hạn số kết nối
+  connectionTimeoutMillis: 10_000, // DB online có thể "ngủ" khi không dùng, cần vài giây để thức
+});
+
+// DB online có thể tự cắt kết nối đang rảnh; ghi log thay vì để lỗi làm sập server
+pool.on('error', (err) => console.error('[DB] Kết nối rảnh bị lỗi:', err.message));
 
 /** Ngày hôm nay theo giờ máy chủ (YYYY-MM-DD), không dùng toISOString vì đó là giờ UTC */
 export function localDate(d = new Date()) {

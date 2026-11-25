@@ -26,6 +26,7 @@ Hệ thống web quản lý phòng khám nha khoa **Phòng khám Nấm yêu**, x
 - API: `cd server && npm run dev` (tự reload). Cấu hình ở `server/.env` (mẫu: `.env.example`).
 - Web: `cd web && npm run dev`; kiểm tra biên dịch: `npx next build`.
 - Database: `start-db.bat` / `stop-db.bat`; psql: `%USERPROFILE%\PostgreSQL17\pgsql\bin\psql.exe -h localhost -U tramadmin -d phong_kham_nam_yeu`.
+- DB online (Neon): điền `server/.env.production` (mẫu `.env.production.example`), chạy `powershell -ExecutionPolicy Bypass -File database\deploy-online.ps1` (thêm `-Overwrite` để ghi đè); chạy API với DB online: `cd server && npm run start:prod`.
 - Tạo lại DB từ đầu: chạy `database/00_create_database.sql` bằng superuser `tramnguyen`, rồi `01`–`04` bằng `tramadmin` với `-1 -v ON_ERROR_STOP=1`.
 
 ## Quy ước code

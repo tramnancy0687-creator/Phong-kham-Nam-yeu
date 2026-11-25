@@ -1,0 +1,23 @@
+# Render Blueprint — deploy backend (server/) lên Render, gói free.
+# Tạo service: mở https://render.com/deploy?repo=https://github.com/tramnancy0687-creator/Phong-kham-Nam-yeu
+services:
+  - type: web
+    name: phong-kham-nam-yeu-api
+    runtime: node
+    plan: free
+    region: singapore # gần DB Neon (aws-ap-southeast-1)
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DB_POOL_MAX
+        value: "5"
+      - key: DATABASE_URL # chuỗi kết nối Neon — nhập tay khi tạo (lấy trong server/.env.production)
+        sync: false
+      - key: JWT_SECRET # Render tự sinh chuỗi ngẫu nhiên
+        generateValue: true

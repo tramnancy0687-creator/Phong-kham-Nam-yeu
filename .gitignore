@@ -1,6 +1,8 @@
 # Bí mật (mật khẩu, JWT secret) — không đưa vào Git
 .env
-.env*.local
+.env.*
+!.env.example
+!.env.*.example
 
 # Thư viện và bản build (tạo lại được bằng npm install / next build)
 node_modules/

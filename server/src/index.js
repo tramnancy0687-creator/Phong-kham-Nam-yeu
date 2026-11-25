@@ -51,7 +51,10 @@ const server = app.listen(port, () => {
 });
 const timer = setInterval(archiveExpiredPatients, 24 * 60 * 60 * 1000);
 
-process.on('SIGINT', () => {
-  clearInterval(timer);
-  server.close(() => pool.end().then(() => process.exit(0)));
-});
+// SIGINT: Ctrl+C khi chạy local · SIGTERM: nền tảng hosting tắt / khởi động lại server
+for (const signal of ['SIGINT', 'SIGTERM']) {
+  process.on(signal, () => {
+    clearInterval(timer);
+    server.close(() => pool.end().then(() => process.exit(0)));
+  });
+}

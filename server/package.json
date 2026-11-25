@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch --env-file=.env src/index.js",
-    "start": "node --env-file=.env src/index.js"
+    "start": "node --env-file-if-exists=.env src/index.js",
+    "start:prod": "node --env-file=.env.production src/index.js"
+  },
+  "engines": {
+    "node": ">=22.9"
   },
   "dependencies": {
     "express": "^5.3.0",
