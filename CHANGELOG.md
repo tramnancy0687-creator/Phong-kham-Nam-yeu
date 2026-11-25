@@ -5,7 +5,7 @@ Ghi mới nhất lên trên. Mỗi lần sửa web app: thêm một mục ngắn
 ## 2026-11-25 — request mẫu cho API
 
 - `.claude/docs/api/phong-kham.http`: ~30 request mẫu theo nhóm use case (chạy bằng extension REST Client), chuyển online/local bằng biến `@base`.
-- **Còn dở:** Render chưa tự deploy commit `579c988` (tách `app.js`) — cần bấm Manual Deploy trên dashboard hoặc bật Auto-Deploy.
+- Render đã deploy code mới (Manual Deploy + bật Auto-Deploy On Commit). Đã kiểm tra: endpoint cron mới, đăng nhập/bệnh nhân/dashboard qua web, 6 trang chính → đạt.
 
 ## 2026-11-25 — thử chuyển sang Vercel (bị chặn), giữ Render
 
