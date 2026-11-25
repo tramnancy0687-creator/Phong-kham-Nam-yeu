@@ -13,7 +13,9 @@ Ghi mới nhất lên trên. Mỗi lần sửa web app: thêm một mục ngắn
 - `DATABASE_URL` dùng `sslmode=verify-full` (Node `pg` kiểm tra chứng chỉ); script deploy tự đổi sang `require` cho psql.
 - Quản lý DB online: https://console.neon.tech hoặc `npx neonctl` (đã đăng nhập trên máy này).
 - `render.yaml`: Blueprint deploy backend lên Render (free, Singapore, rootDir `server`, health check `/api/health`).
-- **Còn dở:** tạo service trên Render, deploy web lên Vercel (biến `API_URL` = URL Render, cần có lúc build vì `rewrites` đọc khi build). `start-app.bat` vẫn dùng DB local.
+- Backend đã chạy trên Render: https://phong-kham-nam-yeu-api.onrender.com (đã thử đăng nhập, dữ liệu qua Neon: đạt).
+- Vercel bị mạng công ty chặn → web cũng deploy lên Render: service `phong-kham-nam-yeu-web` trong `render.yaml` (`API_URL` trỏ backend, đọc lúc build vì `rewrites`).
+- `start-app.bat` vẫn dùng DB local.
 
 ## 2026-11-25
 

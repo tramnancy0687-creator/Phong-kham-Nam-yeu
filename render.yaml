@@ -1,4 +1,4 @@
-# Render Blueprint — deploy backend (server/) lên Render, gói free.
+# Render Blueprint — deploy backend (server/) và web (web/) lên Render, gói free.
 # Tạo service: mở https://render.com/deploy?repo=https://github.com/tramnancy0687-creator/Phong-kham-Nam-yeu
 services:
   - type: web
@@ -21,3 +21,20 @@ services:
         sync: false
       - key: JWT_SECRET # Render tự sinh chuỗi ngẫu nhiên
         generateValue: true
+
+  - type: web
+    name: phong-kham-nam-yeu-web
+    runtime: node
+    plan: free
+    region: singapore
+    rootDir: web
+    buildCommand: npm ci && npm run build
+    startCommand: npx next start -p $PORT # Render cấp cổng qua biến PORT
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      # next.config.mjs đọc biến này lúc build để chuyển /api/* sang backend
+      - key: API_URL
+        value: https://phong-kham-nam-yeu-api.onrender.com
