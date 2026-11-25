@@ -1,0 +1,175 @@
+# API Phòng khám Nấm yêu — request mẫu
+# Mở bằng extension "REST Client" (humao.rest-client): bấm chữ "Send Request" phía trên mỗi request.
+# Chạy request "login" TRƯỚC — các request sau tự dùng token của nó.
+#
+# Đổi môi trường: bỏ dấu # ở dòng @base muốn dùng (chỉ giữ một dòng).
+# Bản online lần đầu có thể mất 30–60 giây (server free đang "ngủ").
+
+@base = https://phong-kham-nam-yeu-api.onrender.com/api
+# @base = http://localhost:4000/api
+
+@token = {{login.response.body.token}}
+
+### Kiểm tra backend + database (không cần đăng nhập)
+GET {{base}}/health
+
+### Đăng nhập — đổi username để thử vai trò khác: letan.lan (lễ tân), bs.minh (bác sĩ), ql.tam (quản lý)
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "ql.tam",
+  "password": "123456"
+}
+
+### Thông tin người đang đăng nhập
+GET {{base}}/auth/me
+Authorization: Bearer {{token}}
+
+# ───────────── A. Bệnh nhân (UC01–UC04) ─────────────
+
+### Tìm bệnh nhân theo tên hoặc SĐT
+GET {{base}}/patients?q=Châu
+Authorization: Bearer {{token}}
+
+### Chi tiết một bệnh nhân
+GET {{base}}/patients/7
+Authorization: Bearer {{token}}
+
+### Lịch sử khám của bệnh nhân
+GET {{base}}/patients/7/history
+Authorization: Bearer {{token}}
+
+# ───────────── B. Lịch hẹn (UC05–UC08) ─────────────
+
+### Lịch theo ngày: ghế, ca trực, lịch hẹn
+GET {{base}}/schedule?date=2026-11-25
+Authorization: Bearer {{token}}
+
+### Chi tiết lịch hẹn
+GET {{base}}/appointments/9
+Authorization: Bearer {{token}}
+
+# ───────────── Danh mục (dùng để biết id khi tạo dữ liệu) ─────────────
+
+### Bác sĩ
+GET {{base}}/doctors
+Authorization: Bearer {{token}}
+
+### Ghế
+GET {{base}}/chairs
+Authorization: Bearer {{token}}
+
+### Dịch vụ + giá hiện hành
+GET {{base}}/services
+Authorization: Bearer {{token}}
+
+### Ca trực
+GET {{base}}/shifts
+Authorization: Bearer {{token}}
+
+### Lý do hủy lịch
+GET {{base}}/cancel-reasons
+Authorization: Bearer {{token}}
+
+# ───────────── C. Điều trị (UC09–UC14) ─────────────
+
+### Phiếu điều trị (gồm việc điều trị, đơn thuốc, vật tư, lịch sử sửa)
+GET {{base}}/records/4
+Authorization: Bearer {{token}}
+
+### Danh sách liệu trình
+GET {{base}}/plans
+Authorization: Bearer {{token}}
+
+# ───────────── D. Hóa đơn & công nợ (UC15–UC19) ─────────────
+
+### Hóa đơn (thêm ?debt_only=true để chỉ lấy hóa đơn còn nợ)
+GET {{base}}/invoices
+Authorization: Bearer {{token}}
+
+### Chi tiết hóa đơn
+GET {{base}}/invoices/3
+Authorization: Bearer {{token}}
+
+### Công nợ theo bệnh nhân
+GET {{base}}/debts
+Authorization: Bearer {{token}}
+
+# ───────────── E. Kho (UC24–UC25) ─────────────
+
+### Thuốc & vật tư, tồn kho
+GET {{base}}/items
+Authorization: Bearer {{token}}
+
+### Cảnh báo dưới ngưỡng
+GET {{base}}/alerts
+Authorization: Bearer {{token}}
+
+# ───────────── F. Báo cáo (UC27, chỉ Quản lý) ─────────────
+
+### Số liệu trang tổng quan
+GET {{base}}/dashboard
+Authorization: Bearer {{token}}
+
+### UC27.1 Doanh thu theo bác sĩ
+GET {{base}}/reports/doctor-revenue
+Authorization: Bearer {{token}}
+
+### UC27.2 Ghế trống theo khoảng ngày
+GET {{base}}/reports/chair-free?from=2026-11-25&to=2026-11-25&open=08:00&close=20:00
+Authorization: Bearer {{token}}
+
+### UC27.3 Bệnh nhân lâu không quay lại
+GET {{base}}/reports/inactive-patients
+Authorization: Bearer {{token}}
+
+### UC27.4 Lịch hủy theo dịch vụ
+GET {{base}}/reports/cancellations
+Authorization: Bearer {{token}}
+
+### UC27.5 Công nợ
+GET {{base}}/reports/debts
+Authorization: Bearer {{token}}
+
+### UC27.6 Liệu trình đang thực hiện
+GET {{base}}/reports/plans-in-progress
+Authorization: Bearer {{token}}
+
+### UC27.7 Vật tư sắp hết
+GET {{base}}/reports/low-stock
+Authorization: Bearer {{token}}
+
+### UC27.8 Doanh thu theo tháng
+GET {{base}}/reports/monthly-revenue
+Authorization: Bearer {{token}}
+
+# ───────────── Kiểm tra lỗi (không ghi dữ liệu) ─────────────
+
+### Gọi khi chưa có token → 401 "Chưa đăng nhập"
+GET {{base}}/patients
+
+### Sai mật khẩu → 401
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "username": "ql.tam", "password": "sai-mat-khau" }
+
+# ───────────── GHI DỮ LIỆU — cẩn thận khi @base là bản online ─────────────
+# Cần đăng nhập bằng lễ tân (letan.lan). Lấy id thật từ GET /doctors, /chairs, /services ở trên.
+# Đặt trùng giờ/ghế đã có lịch → 409 "Ghế này đã có lịch hẹn…"; giờ lẻ (ví dụ 09:15) → 400.
+
+### Đặt lịch hẹn (UC05)
+POST {{base}}/appointments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "patient_id": 7,
+  "doctor_id": 9,
+  "chair_id": 4,
+  "service_id": 4,
+  "start_at": "2026-12-01 09:00",
+  "note": "Thử từ REST Client"
+}
